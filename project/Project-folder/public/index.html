@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект</title>
+    <script src="https://unpkg.com/vue@3.3.4"></script>
+    <link rel="stylesheet" href="/Project-folder/style.css">
+    <style>
+        /* 背景動画を全画面表示 */
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* コンテンツのスタイル */
+        #app {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #FF6F61;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #E65550;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #FFD700;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #993d3d;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        form button {
+            max-width: 400px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <video autoplay loop muted class="background-video">
+        <source src="videos/5-135665794.mp4" type="video/mp4">
+    </video>
+
+    <!-- Vue.jsアプリケーション -->
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <button @click="toggleComponents">
+            {{ show ? 'Скрыть меню и форму' : 'Показать меню и форму' }}
+        </button>
+        <div v-if="show">
+            <menu-component></menu-component>
+            <contact-form></contact-form>
+        </div>
+    </div>
+
+    <script>
+        const MenuComponent = {
+            template: `
+                <nav>
+                    <ul>
+                        <li><a href="person/home.html">Главная</a></li>
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#services">Услуги</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                    </ul>
+                </nav>
+            `,
+        };
+
+        const ContactForm = {
+            template: `
+                <form @submit.prevent="submitForm">
+                    <input type="text" v-model="name" placeholder="Ваше имя" required />
+                    <input type="email" v-model="email" placeholder="Ваш email" required />
+                    <textarea v-model="message" placeholder="Ваше сообщение" required></textarea>
+                    <button type="submit">Отправить</button>
+                </form>
+            `,
+            data() {
+                return {
+                    name: '',
+                    email: '',
+                    message: '',
+                };
+            },
+            methods: {
+                submitForm() {
+                    console.log('Form data:', {
+                        name: this.name,
+                        email: this.email,
+                        message: this.message,
+                    });
+                    alert('Форма успешно отправлена!');
+                    this.name = '';
+                    this.email = '';
+                    this.message = '';
+                },
+            },
+        };
+
+        const App = {
+            data() {
+                return {
+                    message: "Добро пожаловать в Vue.js!",
+                    show: false,
+                };
+            },
+            methods: {
+                toggleComponents() {
+                    this.show = !this.show;
+                },
+            },
+            components: {
+                'menu-component': MenuComponent,
+                'contact-form': ContactForm,
+            },
+        };
+
+        Vue.createApp(App).mount("#app");
+    </script>
+</body>
+
+</html>
